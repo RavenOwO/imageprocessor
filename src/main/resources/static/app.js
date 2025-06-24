@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const resultContainer = document.getElementById("resultContainer");
   const jobIdOutput = document.getElementById("jobIdOutput");
 
+  document.getElementById("clearGalleryBtn").addEventListener("click", () => {
+    const gallery = document.getElementById("gallery");
+    gallery.innerHTML = "";
+  });
+
   operationSelect.addEventListener("change", () => {
     const op = operationSelect.value;
     paramsDiv.innerHTML = "";
@@ -51,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const jobId = text.split(": ").pop().trim();
       jobIdOutput.innerText = `Job submitted. Job ID: ${jobId}`;
 
-      // Poll for result
+    // Poll for result
     const pollStatus = async () => {
       const statusRes = await fetch(`/api/status/${jobId}`);
       const statusJson = await statusRes.json();
@@ -60,15 +65,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const imgBlob = await fetch(`/api/result/${jobId}`).then(r => r.blob());
         const imgUrl = URL.createObjectURL(imgBlob);
 
-        resultContainer.innerHTML = `
-          <h3>Result:</h3>
-          <img src="${imgUrl}" class="preview"><br>
-          <a href="${imgUrl}" download="processed-image.jpg">
-            <button class="download-btn">Download Result</button>
-          </a>
-        `;
+        const imgElem = document.createElement("img");
+        imgElem.src = imgUrl;
+        imgElem.classList.add("preview");
+
+        const gallery = document.getElementById("gallery");
+        gallery.appendChild(imgElem);
+
+        jobIdOutput.innerText = "";
       } else if (statusJson.state === "FAILED") {
-        resultContainer.innerHTML = `<p class="error">Processing failed.</p>`;
+        jobIdOutput.innerText = "Processing failed.";
       } else {
         setTimeout(pollStatus, 1000);
       }
