@@ -1,14 +1,12 @@
-# Use an official OpenJDK 17 image as base
-FROM openjdk:17-jdk-slim
-
-# Set working directory
+# Stage 1: Build the application
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copy the built JAR file into the image
-COPY target/imageprocessor-0.0.1-SNAPSHOT.jar app.jar
-
-# Expose the port your app runs on (default Spring Boot = 8080)
+# Stage 2: Run the application
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=builder /app/target/imageprocessor-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-
-# Run the JAR
 ENTRYPOINT ["java", "-jar", "app.jar"]
