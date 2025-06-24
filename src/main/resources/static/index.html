@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Processor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Java Image Processor</h1>
+<form id="uploadForm">
+    <input type="file" id="image" name="image" required>
+    <label for="operation"></label><select id="operation" name="operation">
+        <option value="grayscale">Grayscale</option>
+        <option value="resize">Resize</option>
+        <option value="rotate">Rotate</option>
+        <option value="flip">Flip Horizontal</option>
+        <option value="invert">Invert Colors</option>
+        <option value="blur">Blur</option>
+        <option value="sharpen">Sharpen</option>
+    </select>
+    <div id="params"></div>
+    <button type="submit">Upload</button>
+</form>
+
+<p id="jobIdOutput"></p>
+<div id="resultContainer"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
