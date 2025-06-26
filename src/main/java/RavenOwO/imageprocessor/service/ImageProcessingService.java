@@ -10,13 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.UUID;
 import java.util.concurrent.*;
-import java.util.stream.IntStream;
 
 @Service
 public class ImageProcessingService {
@@ -27,7 +25,10 @@ public class ImageProcessingService {
 
     public ImageProcessingService() {
         if (!outputDir.exists()) {
-            outputDir.mkdirs();
+            boolean success = outputDir.mkdirs();
+            if (success) {
+                System.out.println("directories successfully created!");
+            }
         }
     }
 
